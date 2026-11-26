@@ -1,0 +1,327 @@
+import { RobotComponentInfo } from '../types/robot';
+
+export const ROBOT_COMPONENTS: RobotComponentInfo[] = [
+  {
+    id: 'rplidar',
+    name: '1. Cảm biến LiDAR 360°',
+    vietnameseName: 'Cảm biến đo khoảng cách Laser RPLIDAR (Slamtec A1/A2)',
+    category: 'sensors',
+    categoryLabel: 'Cảm biến khoảng cách Laser',
+    functionSummary:
+      'Quét môi trường xung quanh bằng tia laser 360 độ để xác định khoảng cách tới các vật cản, phục vụ thuật toán SLAM (xây dựng bản đồ) và Navigation (tự động điều hướng / định tuyến).',
+    detailedRole:
+      'Vị trí: Khối hình trụ màu đen nằm ở trên cùng của robot (tầng nóc). Được trang bị động cơ kéo dây curoa độc lập quay đều 360 độ liên tục với tần số quét 5.5Hz - 10Hz. Sử dụng xung laser hồng ngoại đo khoảng cách và tạo ra đám mây điểm 2D (Point Cloud) theo thời gian thực. Giúp hệ thống phát hiện chính xác vị trí tường, người, chướng ngại vật trong bán kính lên tới 12m để robot tự vẽ bản đồ không gian và lập lộ trình di chuyển tối ưu không va chạm.',
+    specs: [
+      { label: 'Vị trí lắp đặt', value: 'Khối trụ tròn màu đen trên cùng của robot' },
+      { label: 'Góc quét', value: '360° toàn phương liên tục' },
+      { label: 'Tầm đo khoảng cách', value: '0.15m – 12.0m' },
+      { label: 'Ứng dụng chính', value: 'SLAM (Bản đồ) & Navigation (Định tuyến)' },
+      { label: 'Tần số quay', value: '5.5 Hz – 10 Hz (Điều khiển qua PWM/Dây curoa)' },
+      { label: 'Tốc độ lấy mẫu', value: '2000 – 8000 điểm đo / giây' },
+    ],
+    interfaces: 'UART TTL nối qua bo USB-UART màu xanh lá, cấp nguồn DC 5V',
+    voltage: '5V DC - 600mA',
+    rosPackage: 'rplidar_ros, slam_toolbox, cartographer_ros, nav2',
+    importance: 'Trọng yếu',
+    highlightColor: '#ef4444', // Red laser
+    imageRegion: {
+      x: 331,
+      y: 106,
+      w: 120,
+      h: 100,
+      kitNumber: '#6',
+      label: 'Cảm biến RPLIDAR 360° & Bo USB-UART',
+    },
+    realPhoto: '/assets/aistudio/image_d728fd81.png',
+  },
+  {
+    id: 'camera_csi',
+    name: '2. Camera góc rộng (CSI)',
+    vietnameseName: 'Module Camera CSI (Sony IMX219) + Giá đỡ xanh lá',
+    category: 'sensors',
+    categoryLabel: 'Thị giác máy tính AI (Computer Vision)',
+    functionSummary:
+      'Thu thập hình ảnh thực tế phía trước robot để nhận diện biển báo, vật cản, tự động bám theo làn đường (Line Following) và nhận diện/bám theo khuôn mặt hoặc vật thể (Object Tracking).',
+    detailedRole:
+      'Vị trí: Gắn phía trước robot trên giá đỡ nhôm anod màu xanh lá cây có hai ốc siết bằng đồng chỉnh góc ngẩng/cúi linh hoạt. Kết nối trực tiếp vào bo mạch trung tâm bằng cáp dẹt màu trắng (FFC cable in chữ AWM 20706). Cung cấp luồng video độ phân giải cao và độ trễ siêu thấp truyền thẳng vào GPU của Jetson Nano mà không tốn tài nguyên CPU, phục vụ các mô hình thị giác AI thời gian thực (Deep Learning YOLO, MobileNet, Lane Detection).',
+    specs: [
+      { label: 'Vị trí lắp đặt', value: 'Phía trước xe trên giá đỡ nhôm màu xanh lá' },
+      { label: 'Cáp kết nối', value: 'Cáp dẹt màu trắng (FFC Cable AWM 20706 15-pin)' },
+      { label: 'Cảm biến', value: 'Sony IMX219 8 Megapixel góc rộng Fisheye' },
+      { label: 'Chức năng AI 1', value: 'Nhận diện biển báo giao thông & chướng ngại vật' },
+      { label: 'Chức năng AI 2', value: 'Tự động bám làn đường (Line Following / Lane Detection)' },
+      { label: 'Chức năng AI 3', value: 'Nhận diện và bám theo khuôn mặt / vật thể (Object Tracking)' },
+    ],
+    interfaces: 'Giao tiếp phần cứng MIPI CSI-2 15-pin tốc độ cao',
+    voltage: '3.3V cấp từ chân cắm Jetson Nano',
+    rosPackage: 'v4l2_camera, image_transport, jetbot_cam, opencv_cam',
+    importance: 'Trọng yếu',
+    highlightColor: '#06b6d4', // Cyan
+    imageRegion: {
+      x: 587,
+      y: 106,
+      w: 86,
+      h: 92,
+      kitNumber: '#10',
+      label: 'Module Camera CSI & Cáp FFC trắng',
+    },
+    extraRegions: [
+      {
+        x: 630,
+        y: 203,
+        w: 62,
+        h: 90,
+        kitNumber: '#17',
+        label: 'Giá đỡ Camera nhôm anod xanh',
+      },
+    ],
+    realPhoto: '/assets/aistudio/image_0ddb345c.png',
+  },
+  {
+    id: 'jetson_nano',
+    name: '3. Bo điều khiển NVIDIA Jetson Nano',
+    vietnameseName: 'NVIDIA Jetson Nano Developer Kit + Quạt tản nhiệt 40mm',
+    category: 'compute_ai',
+    categoryLabel: 'Bộ não xử lý trung tâm & AI',
+    functionSummary:
+      'Đóng vai trò là "bộ não" của robot. Nhận dữ liệu từ Camera, LiDAR, chạy các mô hình trí tuệ nhân tạo (AI/Deep Learning) và đưa ra lệnh điều khiển chuyển động cho robot.',
+    detailedRole:
+      'Vị trí: Nằm ở tầng giữa của robot. Thành phần đi kèm cực kỳ quan trọng: Khối tản nhiệt nhôm đen + Quạt tản nhiệt (Cooling Fan 40mm) gắn ngay phía trên chip Jetson Nano để làm mát tích cực khi chạy các mô hình AI/Deep Learning nặng liên tục. Bên dưới bo mạch có khe cắm thẻ nhớ MicroSD chứa hệ điều hành Ubuntu, CUDA, TensorRT và ROS2. Bo mạch xử lý song song dữ liệu cảm biến và tính toán vận tốc gửi xuống mạch mở rộng.',
+    specs: [
+      { label: 'Vị trí lắp đặt', value: 'Nằm ở tầng giữa của robot' },
+      { label: 'Tản nhiệt & Quạt', value: 'Heatsink nhôm đen + Quạt làm mát 40mm (Cooling Fan)' },
+      { label: 'CPU', value: 'Quad-core ARM® Cortex®-A57 @ 1.43 GHz' },
+      { label: 'GPU AI', value: '128-core NVIDIA Maxwell™ Architecture' },
+      { label: 'Bộ nhớ RAM', value: '4 GB 64-bit LPDDR4' },
+      { label: 'Hệ điều hành', value: 'Ubuntu Linux 20.04 LTS / ROS2 / CUDA' },
+    ],
+    interfaces: 'Gigabit Ethernet, 4x USB 3.0 (xanh), HDMI, 40-pin GPIO, MIPI CSI-2',
+    voltage: '5V - 4A DC Jack',
+    rosPackage: 'ros2_control, nav2, jetson_stats, ros_deep_learning',
+    importance: 'Bắt buộc',
+    highlightColor: '#10b981', // Emerald green
+    imageRegion: {
+      x: 9,
+      y: 10,
+      w: 139,
+      h: 129,
+      kitNumber: '#1',
+      label: 'Bo mạch NVIDIA Jetson Nano Developer Kit',
+    },
+    extraRegions: [
+      {
+        x: 135,
+        y: 219,
+        w: 93,
+        h: 102,
+        kitNumber: '#13',
+        label: 'Quạt tản nhiệt 40mm (Cooling Fan)',
+      },
+    ],
+    realPhoto: '/assets/aistudio/image_1627583d.png',
+  },
+  {
+    id: 'motor_driver',
+    name: '4. Mạch mở rộng & Driver động cơ',
+    vietnameseName: 'Jetbot Expansion Board / Baseboard WaveShare',
+    category: 'actuation_motion',
+    categoryLabel: 'Mạch mở rộng & Điều khiển động cơ',
+    functionSummary:
+      'Nhận tín hiệu điều khiển từ Jetson Nano để cấp dòng điện và điều chỉnh tốc độ, hướng quay của các động cơ.',
+    detailedRole:
+      'Vị trí: Bo mạch màu đen nằm ngay dưới mạch Jetson Nano. Đặc điểm phần cứng: Tích hợp các cổng cắm nguồn, cổng kết nối động cơ, IC driver điều khiển động cơ (Motor Driver cầu H MOSFET), mạch quản lý và bảo vệ pin, công tắc nguồn gạt kim loại (AI PWR), giắc DC, màn hình hiển thị OLED 0.91 inch và cổng giao tiếp IO (GPIO Header) kết nối trực tiếp với Jetson Nano.',
+    specs: [
+      { label: 'Vị trí lắp đặt', value: 'Bo mạch màu đen nằm ngay dưới bo Jetson Nano' },
+      { label: 'Thành phần mạch', value: 'IC Motor Driver, mạch sạc pin, công tắc AI PWR, OLED' },
+      { label: 'Chức năng chính', value: 'Cấp dòng điện và điều chỉnh tốc độ, hướng quay động cơ' },
+      { label: 'Điện áp cấp motor', value: 'VM = 6V – 12V DC' },
+      { label: 'Màn hình OLED', value: '0.91" hiển thị IP, dung lượng pin, trạng thái hệ thống' },
+      { label: 'Giao tiếp điều khiển', value: 'I2C / GPIO PWM kết nối Jetson Nano' },
+    ],
+    interfaces: 'Cổng động cơ JST, I2C Bus, Chân PWM, Cọc nguồn pin, Switch gạt nguồn',
+    voltage: '5V (Logic) & 12V (Động cơ)',
+    rosPackage: 'serial_motor_driver, diff_drive_controller',
+    importance: 'Bắt buộc',
+    highlightColor: '#8b5cf6', // Violet
+    imageRegion: {
+      x: 331,
+      y: 0,
+      w: 113,
+      h: 99,
+      kitNumber: '#5',
+      label: 'Mạch mở rộng JetBot & Khay pin 3S',
+    },
+    realPhoto: '/assets/aistudio/image_fd68d85a.png',
+  },
+  {
+    id: 'wifi_antennas',
+    name: '5. Hệ thống ăng-ten Wi-Fi kép',
+    vietnameseName: 'Cặp Ăng-ten Wi-Fi / Bluetooth Đa Hướng (Dual Omni Antennas)',
+    category: 'power_structure',
+    categoryLabel: 'Kết nối không dây & Telemetry',
+    functionSummary:
+      'Kết nối Jetson Nano với mạng Wi-Fi nội bộ, cho phép điều khiển từ xa, truyền dữ liệu video hình ảnh (streaming) hoặc lập trình qua Jupyter Notebook / SSH.',
+    detailedRole:
+      'Vị trí: 2 ăng-ten màu đen dựng đứng ở hai bên robot, bắt chắc chắn qua đầu nối ren đồng SMA mạ vàng xuyên qua sàn đế. Bên dưới nối với card mạng M.2 không dây (Intel Wireless-AC) gắn ngầm dưới Jetson Nano. Đảm bảo tầm bắt sóng xa, băng thông lớn và độ trễ thấp để truyền video từ Camera CSI về máy tính máy trạm, nhận lệnh lái từ xa và cho phép thao tác lập trình trực tiếp bằng trình duyệt qua Jupyter Notebook.',
+    specs: [
+      { label: 'Vị trí lắp đặt', value: '2 ăng-ten màu đen dựng đứng ở hai bên robot' },
+      { label: 'Chuẩn kết nối', value: 'Đầu nối ren đồng mạ vàng SMA, cáp IPEX MHF4' },
+      { label: 'Băng tần hỗ trợ', value: 'Dual-band 2.4GHz & 5GHz (Wi-Fi 5 802.11ac)' },
+      { label: 'Tác dụng 1', value: 'Truyền dữ liệu video hình ảnh trực tiếp (Live streaming)' },
+      { label: 'Tác dụng 2', value: 'Lập trình không dây qua Jupyter Notebook / SSH Terminal' },
+      { label: 'Tác dụng 3', value: 'Điều khiển robot từ xa qua mạng Wi-Fi nội bộ' },
+    ],
+    interfaces: 'Cáp đồng trục IPEX sang SMA ren đực, Card M.2 Key-E Wi-Fi/BT',
+    voltage: 'Tín hiệu sóng vô tuyến RF',
+    rosPackage: 'rosbridge_suite, web_video_server, zenoh-bridge-dds',
+    importance: 'Cần thiết',
+    highlightColor: '#f97316', // Orange
+    imageRegion: {
+      x: 595,
+      y: 0,
+      w: 116,
+      h: 106,
+      kitNumber: '#9',
+      label: 'Module Wi-Fi M.2, Dây Coax & 2 Ăng-ten',
+    },
+    realPhoto: '/assets/aistudio/image_fd68d85a.png',
+  },
+  {
+    id: 'robot_chassis',
+    name: '6. Khung gầm xe (Chassis)',
+    vietnameseName: 'Đế kim loại nhôm Anod xanh lá & Các tầng xếp chắc chắn',
+    category: 'power_structure',
+    categoryLabel: 'Khung gầm & Kết cấu cơ khí',
+    functionSummary:
+      'Đế kim loại màu xanh lá cây và các tầng nhựa/kim loại đen xếp tầng chắc chắn, cố định và che chắn bảo vệ toàn bộ các linh kiện điện tử.',
+    detailedRole:
+      'Khung xe (Chassis) gồm: Đế kim loại nhôm mạ anod màu xanh lá cây dày dặn có hai hốc cắt lượn cho bánh xe chủ động, kết hợp với các trụ đồng lục giác ren M3 vững chãi nâng đỡ tầng bo mạch mở rộng và tầng nóc mica/acrylic đen đặt LiDAR. Cấu trúc module nhiều tầng giúp tản nhiệt tối ưu, cách ly rung lắc cơ khí và bảo vệ an toàn cho bo Jetson Nano cũng như cụm pin nguồn bên dưới gầm.',
+    specs: [
+      { label: 'Đế khung dưới', value: 'Tấm kim loại nhôm Anod màu xanh lá cây chống trầy' },
+      { label: 'Tầng trên', value: 'Tấm acrylic/mica màu đen mờ chống tĩnh điện' },
+      { label: 'Trụ liên kết', value: '8 trụ đồng lục giác ren M3 tiêu chuẩn' },
+      { label: 'Hốc bánh xe', value: '2 hốc khoét sâu ôm sát lốp xe cao su' },
+      { label: 'Đặc tính', value: 'Chịu lực cao, hấp thụ xung động, tản nhiệt tự nhiên' },
+    ],
+    interfaces: 'Lỗ ốc bắt vít tiêu chuẩn M2.5, M3, M4 CNC chính xác',
+    voltage: 'Kết cấu cơ khí bảo vệ',
+    rosPackage: 'robot_description (URDF Chassis)',
+    importance: 'Bắt buộc',
+    highlightColor: '#22c55e', // Green
+    imageRegion: {
+      x: 147,
+      y: 0,
+      w: 177,
+      h: 210,
+      kitNumber: '#4',
+      label: 'Khung đế nhôm Anod xanh lá',
+    },
+    extraRegions: [
+      {
+        x: 467,
+        y: 106,
+        w: 123,
+        h: 98,
+        kitNumber: '#8',
+        label: 'Tấm mica tầng trên đỡ LiDAR',
+      },
+    ],
+    realPhoto: '/assets/aistudio/image_1627583d.png',
+  },
+  {
+    id: 'drive_wheels',
+    name: '7. Hai bánh xe chính (Drive Wheels)',
+    vietnameseName: 'Bánh xe cao su gai mâm đúc xanh Chrome (2WD)',
+    category: 'actuation_motion',
+    categoryLabel: 'Hệ thống truyền động chủ động',
+    functionSummary:
+      'Bánh cao su có gai bám đường tốt, truyền động từ hai động cơ DC độc lập (cho phép tiến, lùi, rẽ và xoay tròn tại chỗ).',
+    detailedRole:
+      'Hai bánh xe chủ động lớn được gắn trực tiếp vào trục ra của hai động cơ DC giảm tốc độc lập đặt ở hai bên sườn xe. Lốp cao su mềm có các gai vấu sâu tăng ma sát bám dính sàn chống trượt bánh. Mâm đúc 10 chấu xoắn kép mạ chrome màu xanh dương bóng bẩy. Nhờ cơ chế dẫn động vi sai 2 bánh (Differential Drive), xe có thể tăng tốc mượt mà, ôm cua chính xác và xoay tròn 360 độ quanh tâm xe tại chỗ mà không cần góc đánh lái bánh trước.',
+    specs: [
+      { label: 'Chất liệu lốp', value: 'Cao su có gai bám đường sâu chống trượt' },
+      { label: 'Mâm bánh xe', value: 'Mâm đúc thể thao 10 chấu xoắn màu xanh Chrome bóng' },
+      { label: 'Cơ chế vận hành', value: 'Dẫn động vi sai 2 bánh độc lập (Differential 2WD)' },
+      { label: 'Khả năng đặc biệt', value: 'Xoay tròn 360° tại chỗ với bán kính quay R = 0' },
+      { label: 'Đường kính ngoài', value: '65 mm, bề rộng lốp 26 mm' },
+    ],
+    interfaces: 'Khớp nối lục giác đồng siết ốc ren M3 vào cốt trục động cơ',
+    voltage: 'Cơ khí truyền động',
+    rosPackage: 'diff_drive_controller, nav2_amcl',
+    importance: 'Bắt buộc',
+    highlightColor: '#3b82f6', // Blue
+    imageRegion: {
+      x: 242,
+      y: 219,
+      w: 114,
+      h: 112,
+      kitNumber: '#14',
+      label: 'Bánh xe cao su gai mâm đúc xanh Chrome',
+    },
+    realPhoto: '/assets/aistudio/image_d728fd81.png',
+  },
+  {
+    id: 'caster_wheel',
+    name: '8. Bánh xe hướng (Caster Wheel)',
+    vietnameseName: 'Bánh xe xoay tự do màu xám bên dưới đáy gầm sau',
+    category: 'power_structure',
+    categoryLabel: 'Cân bằng & Dẫn hướng gầm xe',
+    functionSummary:
+      'Bánh xe xoay tự do màu xám bên dưới đáy phía sau, giúp cân bằng xe khi di chuyển và hỗ trợ đổi hướng 360 độ mượt mà.',
+    detailedRole:
+      'Bánh xe hướng (Caster Wheel) được gắn vào đuôi gầm xe phía sau bằng bộ khung gá dập kim loại hình chữ U mạ kẽm (Caster fork) chắc chắn và con lăn cao su đúc màu xám có vòng bi xoay 360 độ tự do. Tạo thành điểm tựa 3 điểm cân bằng vững chắc (2 bánh chủ động phía trước + 1 bánh caster phía sau), ngăn robot không bị bốc đầu khi tăng tốc hoặc chòng chành khi vào cua gắt, giữ sàn LiDAR luôn thăng bằng.',
+    specs: [
+      { label: 'Vị trí lắp đặt', value: 'Bên dưới đáy phía sau gầm xe' },
+      { label: 'Bộ khung gá', value: 'Gá kim loại chữ U dập mạ kẽm kèm vòng bi xoay' },
+      { label: 'Con lăn', value: 'Bánh lăn cao su đặc màu xám' },
+      { label: 'Chức năng', value: 'Giữ thăng bằng xe, tự do xoay chuyển hướng 360°' },
+      { label: 'Độ bền', value: 'Chịu tải trọng tốt, ma sát trượt thấp' },
+    ],
+    interfaces: 'Bắt vít kim loại ren M3 cố định gầm xe',
+    voltage: 'Cơ khí đỡ tải',
+    rosPackage: 'URDF passive caster link',
+    importance: 'Cần thiết',
+    highlightColor: '#94a3b8', // Silver
+    imageRegion: {
+      x: 10,
+      y: 219,
+      w: 102,
+      h: 97,
+      kitNumber: '#12',
+      label: 'Bánh xe xoay tự do (Caster Wheel)',
+    },
+    realPhoto: '/assets/aistudio/image_fd68d85a.png',
+  },
+  {
+    id: 'dc_motors',
+    name: '9. Hai Động cơ DC & Khối Nguồn Pin',
+    vietnameseName: 'Cặp Động cơ Giảm Tốc + Bộ Nguồn Pin Lithium 3S',
+    category: 'actuation_motion',
+    categoryLabel: 'Cơ năng truyền động & Nguồn cấp',
+    functionSummary:
+      'Tạo cơ năng quay bánh xe và cấp nguồn điện độc lập (khối pin sạc Li-ion) cho cả mạch Jetson Nano, LiDAR và động cơ.',
+    detailedRole:
+      'Bao gồm hai thành phần thiết yếu: (1) Hai động cơ DC giảm tốc hộp số bánh răng kim loại gắn dưới sàn xe, chịu trách nhiệm biến điện năng thành mô-men xoắn kéo xe vượt dốc; (2) Bộ nguồn / Pin nằm gọn dưới đáy gầm xe (dãy 3 cell pin 18650 mắc nối tiếp 12V hoặc bộ sạc dự phòng chuyên dụng) cấp nguồn độc lập ổn định cho cả bo mạch Jetson Nano, LiDAR và động cơ để robot vận hành tự do không cần dây cắm cố định.',
+    specs: [
+      { label: 'Vị trí động cơ', value: 'Gắn đối xứng dưới sàn đáy liên kết bánh xe' },
+      { label: 'Vị trí pin', value: 'Dãy pin 18650 đặt ở gầm xe dưới bo mạch mở rộng' },
+      { label: 'Điện áp pin', value: 'Pin Lithium 3S 12.6V hoặc mạch nguồn chuyên dụng' },
+      { label: 'Hộp số động cơ', value: 'Giảm tốc bánh răng kim loại tỉ số 1:30' },
+      { label: 'Tác dụng', value: 'Tạo lực kéo chuyển động và cấp nguồn không dây hoàn toàn' },
+    ],
+    interfaces: 'Dây cấp nguồn DC Jack 5.5mm, cáp động cơ 2-pin JST',
+    voltage: '12V DC (Nguồn công suất độc lập)',
+    rosPackage: 'ros2_control, pid_velocity_node',
+    importance: 'Bắt buộc',
+    highlightColor: '#eab308', // Yellow
+    imageRegion: {
+      x: 458,
+      y: 0,
+      w: 125,
+      h: 102,
+      kitNumber: '#7',
+      label: 'Động cơ DC giảm tốc & Dây cáp kết nối',
+    },
+    realPhoto: '/assets/aistudio/image_d728fd81.png',
+  },
+];

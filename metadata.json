@@ -1,0 +1,6 @@
+{
+  "name": "Mô Hình Robot Thông Minh 3D & Phân Tích Linh Kiện",
+  "description": "Mô phỏng 3D tương tác robot tự hành Jetson Nano & RPLIDAR, tích hợp bảng phân tích linh kiện, chế độ tháo lắp (Exploded View), mô phỏng quét laser LiDAR và điều khiển chuyển động.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
